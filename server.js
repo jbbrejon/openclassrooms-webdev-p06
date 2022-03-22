@@ -1,4 +1,4 @@
-// SCRIPT DESCRIPTION : Node server with http module
+// SCRIPT DESCRIPTION : Node server with http module (entry point of npm package)
 
 // Module dependencies.
 const http = require('http'); // https://nodejs.dev/learn/the-nodejs-http-module
