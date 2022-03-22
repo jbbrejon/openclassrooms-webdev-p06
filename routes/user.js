@@ -5,7 +5,7 @@
 const express = require('express'); // (https://www.npmjs.com/package/express)
 const userCtrl = require('../controllers/user'); // local module
 
-// Call "Router()" method from express module (http://expressjs.com/en/5x/api.html#router)
+// Create "Express" router with "Router()" method (http://expressjs.com/en/5x/api.html#router)
 const router = express.Router();
 
 // Set route for "/api/auth/signup" POST requests (arguments : request -> address, response -> from controllers/user)
