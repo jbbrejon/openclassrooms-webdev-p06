@@ -1,0 +1,23 @@
+{
+  "name": "hot-takes-backend",
+  "version": "1.0.0",
+  "description": "\"OpenClassrooms-WebDev-P6\"",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbbrejon/oc-p6-backend.git"
+  },
+  "author": "jean-baptiste brejon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbbrejon/oc-p6-backend/issues"
+  },
+  "homepage": "https://github.com/jbbrejon/oc-p6-backend#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "nodemon": "^2.0.15"
+  }
+}
