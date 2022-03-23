@@ -34,14 +34,39 @@ exports.getAllSauces = (req, res, next) => {
 
 // CRUD(UPDATE) - Set "modifySauce" operation (modify "sauce" document in "oc-hotTakes" in MongoDB)
 exports.modifySauce = (req, res, next) => {
-    const sauceObject = req.file ? // Check if image was modified by user
-        {
-            ...JSON.parse(req.body.sauce),
-            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // // Set new image URL based on filename sent by "multer-config" middleware
-        } : { ...req.body };
-    Sauce.updateOne({ _id: req.params.id, userId: req.auth.userId }, { ...sauceObject, _id: req.params.id }) // Call "updateOne()" method from mongoose module (arguments : ID from PUT request, object content from PUT request)
-        .then(() => res.status(200).json({ message: 'Sauce modified !' })) // If success -> return status code 200 and confirmation message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200)
-        .catch(error => res.status(400).json({ error })); // If error -> return status code 400 and error message in json (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400)
+    // Compare user id from PUT request with user id from oc-hotTakes MongoDB
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            if (!sauce) { // Check if "sauce" document exists
+                return res.status(404).json({
+                    error: new Error('Sauce not found!') // If not found -> Return status code 404 with error message
+                });
+            }
+            if (sauce.userId !== req.auth.userId) { // Check if user id from PUT request match with user ID from oc-hotTakes MongoDB
+                return res.status(403).json({
+                    error: new Error('403: unauthorized request') // If user ids don't match  -> Return status code 403 with error message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403)
+                });
+            }
+            // Remove file if a new image is uploaded
+            if (req.file) {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, (error) => {
+                    if (error) {
+                        throw error;
+                    }
+                })
+            }
+            // Check if image was modified by user
+            const sauceObject = req.file ?
+                {
+                    ...JSON.parse(req.body.sauce),
+                    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // Set new image URL based on filename sent by "multer-config" middleware
+                } : { ...req.body };
+            Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+                .then(() => res.status(200).json({ message: 'Sauce modified!' })) // If success -> return status code 200 and confirmation message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200)
+                .catch(error => res.status(400).json({ error })); // If error -> return status code 400 and error message in json (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400)
+        })
+        .catch(error => res.status(500).json({ error }));
 };
 
 
@@ -90,18 +115,24 @@ exports.likeSauce = (req, res, next) => {
 
 // CRUD(DELETE) - Set "deleteSauce" operation (delete "sauce" document in "oc-hotTakes" in MongoDB)
 exports.deleteSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id, userId: req.auth.userId }) // Call "findOne()" method from mongoose module to get requested "sauce" document (filter : "sauce ID" and "User ID" from request match with user and sauce IDs from oc-hotTakes MongoDB)
-        .then(sauce => {
-            if (!sauce) {
-                res.status(404).json({ // If sauce cannot be found -> return status code 404 and error message https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
-                    error: new Error('Sauce does not exist!')
+    Sauce.findOne({ _id: req.params.id }) // Call "findOne()" method from mongoose module to get requested "sauce" document )
+        .then((sauce) => {
+            if (!sauce) { // Check if "sauce" document exists
+                return res.status(404).json({
+                    error: new Error('Sauce not found!') // If sauce cannot be found -> return status code 404 and error message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404)
                 });
             }
+            if (sauce.userId !== req.auth.userId) {
+                return res.status(403).json({ // Check if user id from PUT request match with user ID from oc-hotTakes MongoDB
+                    error: new Error('unauthorized request') // // If user ids don't match  -> Return status code 403 with error message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403)
+                });
+            }
+            // Remove file from "images" folder
             const filename = sauce.imageUrl.split('/images/')[1];
-            fs.unlink(`images/${filename}`, () => { // Call "unlink()" method from "fs" module to delete image
-                Sauce.deleteOne({ _id: req.params.id }) // Call "deleteOne()" method from mongoose module to delete "sauce" document
-                    .then(() => res.status(200).json({ message: 'Sauce deleted !' })) // If succes -> return status code 200 and confirmation message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200)
-                    .catch(error => res.status(400).json({ error })); // If error -> return status code 400 and error message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400)
+            fs.unlink(`images/${filename}`, () => {
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Objet supprimé !' }))
+                    .catch(error => res.status(400).json({ error }));
             });
         })
         .catch(error => res.status(500).json({ error }));
