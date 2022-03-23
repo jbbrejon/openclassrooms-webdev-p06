@@ -5,6 +5,8 @@ const express = require('express'); // https://www.npmjs.com/package/express
 const env = require('dotenv').config(); // https://www.npmjs.com/package/dotenv
 const mongoose = require('mongoose'); // https://www.npmjs.com/package/mongoose
 const userRoutes = require('./routes/user'); // local module
+const sauceRoutes = require('./routes/sauce'); // local module
+const path = require('path'); // https://nodejs.org/api/path.htm
 
 
 // Connection to mango database
@@ -34,7 +36,9 @@ app.use(express.json());
 //Specify which route settings to call
 app.use('/api/auth', userRoutes);
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
+app.use('/api/sauces', sauceRoutes);
 
 
 // Make module available through "require()" from other project scripts (https://nodejs.org/api/modules.html#module)
