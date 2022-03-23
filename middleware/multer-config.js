@@ -1,4 +1,4 @@
-// SCRIPT DESCRIPTION: Middelware for "Multer" configuration (file management : naming, add, remove)
+// SCRIPT DESCRIPTION: Middleware for "Multer" configuration (file management : naming, add, remove)
 
 
 // Module dependencies
