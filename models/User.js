@@ -1,10 +1,10 @@
-// SCRIPT DESCRIPTION : "Mongoose" model to create new users in MongoDB (called from ../controllers/users.js)
+// SCRIPT DESCRIPTION : "Mongoose" model for "user" documents in "oc-hotTakes" in MongoDB (called from ../controllers/users.js)
 
 // Module dependencies
 const mongoose = require('mongoose'); //(https://www.npmjs.com/package/mongoose)
 const uniqueValidator = require('mongoose-unique-validator'); // (https://www.npmjs.com/package/mongoose-unique-validator)
 
-// Call Schema method from mongoose module to create new user with email and password (mandatory fields) (https://mongoosejs.com/docs/guide.html#schemas)
+// Call Schema method from mongoose module to set required fiels for the creation of a new "user" document  (https://mongoosejs.com/docs/guide.html#schemas)
 const userSchema = mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }
