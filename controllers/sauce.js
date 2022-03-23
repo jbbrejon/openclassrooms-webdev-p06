@@ -124,14 +124,14 @@ exports.deleteSauce = (req, res, next) => {
             }
             if (sauce.userId !== req.auth.userId) {
                 return res.status(403).json({ // Check if user id from PUT request match with user ID from oc-hotTakes MongoDB
-                    error: new Error('unauthorized request') // // If user ids don't match  -> Return status code 403 with error message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403)
+                    error: new Error('403: unauthorized request') // // If user ids don't match  -> Return status code 403 with error message (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403)
                 });
             }
             // Remove file from "images" folder
             const filename = sauce.imageUrl.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
                 Sauce.deleteOne({ _id: req.params.id })
-                    .then(() => res.status(200).json({ message: 'Objet supprimé !' }))
+                    .then(() => res.status(200).json({ message: 'Sauce removed!' }))
                     .catch(error => res.status(400).json({ error }));
             });
         })
