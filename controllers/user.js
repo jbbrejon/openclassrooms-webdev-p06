@@ -1,4 +1,4 @@
-// SCRIPT DESCRIPTION : Controller for "/api/auth/signup" and "api/auth/login" POST requests (called from ../routes/user.js)
+// SCRIPT DESCRIPTION : Controller for "/api/auth/signup" and "api/auth/login" (called from ../routes/user.js)
 
 // Module dependencies
 const bcrypt = require('bcrypt'); // https://www.npmjs.com/package/bcrypt
@@ -7,9 +7,9 @@ const env = require('dotenv').config(); // https://www.npmjs.com/package/dotenv
 const User = require('../models/User'); // local module (Mongoose model)
 
 // Set variable : token string for 'sign()' method of jsonwebtoken
-const tokenString = process.env.JSON_WEB_TOKEN; // Toeken string to be set in ./.env (not synced with git)
+const tokenString = process.env.JSON_WEB_TOKEN; // Token string to be set in ./.env (not synced with git)
 
-// Set signup commands
+// CRUD(CREATE) - Set "signup" operation (create new "user" document in "oc-hotTakes" in MongoDB)
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10) // Call "hash() method from bcrypt module" (arguments : password from post request, rounds to run hash algorythm)
         .then(hash => {
@@ -17,14 +17,14 @@ exports.signup = (req, res, next) => {
                 email: req.body.email,
                 password: hash
             }); // create new user based on mongoose model (arguments : email, password hashed by bcrypt)
-            user.save() // Call "save()" method from mongoose module
+            user.save() // Call "save()" method from mongoose module to create new "user" document in MongoDB
                 .then(() => res.status(201).json({ message: 'User created!' })) // If succes -> return status code 201 and confirmation message
                 .catch(error => res.status(400).json({ error })); // If error -> return status code "400" and error message
         })
         .catch(error => res.status(500).json({ error })); // Display error if issue with hash() method
 };
 
-// Set login commands
+// CRUD(READ) - Set "login" operation (find existing "user" document in "oc-hotTakes" in MongoDB and check password with bcrypt)
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email }) // Call "findOne() method from mongoose module to check if the user exists" (filter : email from post request)
         .then(user => {
