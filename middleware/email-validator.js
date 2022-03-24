@@ -1,4 +1,4 @@
-// SCRIPT DESCRIPTION : forcer users to type a valid e-mail address
+// SCRIPT DESCRIPTION : force users to type a valid e-mail address (called from ../routes/user)
 
 // Module dependencies
 const validator = require('validator'); // https://www.npmjs.com/package/validator
