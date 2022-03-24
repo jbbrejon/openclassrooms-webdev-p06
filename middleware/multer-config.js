@@ -1,4 +1,4 @@
-// SCRIPT DESCRIPTION: Middleware for "Multer" configuration (file management : naming, add, remove)
+// SCRIPT DESCRIPTION: Middleware for "Multer" configuration - file management : naming, add, remove (called from ../routes/sauce)
 
 
 // Module dependencies
@@ -11,7 +11,7 @@ const MIME_TYPES = {
     'image/png': 'png'
 };
 
-// Call diskStorage method from multer module
+// Call "diskStorage()"" method from multer module
 const storage = multer.diskStorage({
     // Set destination
     destination: (req, file, callback) => {
@@ -26,4 +26,4 @@ const storage = multer.diskStorage({
 });
 
 // Make module available through require() from other project scripts (https://nodejs.org/api/modules.html#module)
-module.exports = multer({ storage }).single('image'); // Call single() method from Multer module (specify it's an operation on a single file, not a bulk operation)
+module.exports = multer({ storage }).single('image'); // Call "single()"" method from Multer module
