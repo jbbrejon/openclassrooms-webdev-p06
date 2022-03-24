@@ -33,12 +33,14 @@ app.use('/', (req, res, next) => {
 // Parse incoming requests with JSON payloads (http://expressjs.com/en/api.html#express.json)
 app.use(express.json());
 
-//Specify which route settings to call
+// Specify which route file to use for requests on "/api/auth"
 app.use('/api/auth', userRoutes);
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
-
+// Specify which route file to use for requests on "/api/sauces"
 app.use('/api/sauces', sauceRoutes);
+
+// Specify static route for "images" folder
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 // Make module available through "require()" from other project scripts (https://nodejs.org/api/modules.html#module)
