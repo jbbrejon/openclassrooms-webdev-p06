@@ -4,13 +4,13 @@
 const express = require('express'); // https://www.npmjs.com/package/express
 const env = require('dotenv').config(); // https://www.npmjs.com/package/dotenv
 const mongoose = require('mongoose'); // https://www.npmjs.com/package/mongoose
-const userRoutes = require('./routes/user'); // local module
-const sauceRoutes = require('./routes/sauce'); // local module
 const path = require('path'); // https://nodejs.org/api/path.htm
+const userRoutes = require('./routes/user'); // local module ("user" routes)
+const sauceRoutes = require('./routes/sauce'); // local module ("sauce" routes)
 
 
-// Connection to mango database
-const connectionString = process.env.CONNECTION_STRING; // Connection string to be set in ./.env (not synced with git)
+// Connection to mango database (connection string to set in ./.env)
+const connectionString = process.env.CONNECTION_STRING;
 mongoose.connect(connectionString,
     {
         useNewUrlParser: true,
@@ -39,9 +39,8 @@ app.use('/api/auth', userRoutes);
 // Specify which route file to use for requests on "/api/sauces"
 app.use('/api/sauces', sauceRoutes);
 
-// Specify static route for "images" folder
+// Specify path for "images" folder
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
 
 // Make module available through "require()" from other project scripts (https://nodejs.org/api/modules.html#module)
 module.exports = app;
