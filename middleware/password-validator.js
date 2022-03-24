@@ -1,4 +1,4 @@
-// SCRIPT DESCRIPTION : force users to set a strong password
+// SCRIPT DESCRIPTION : force users to set a strong password (called from ../routes/user)
 
 // Module dependencies
 const passwordValidator = require('password-validator');
