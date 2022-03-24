@@ -2,7 +2,7 @@
 
 // Module dependencies
 const http = require('http'); // https://nodejs.dev/learn/the-nodejs-http-module
-const app = require('./app'); // Local module (Express app)
+const app = require('./app'); // local module ("Express" app)
 
 // Normalize a port into a number, string, or false
 const normalizePort = val => {
@@ -16,7 +16,7 @@ const normalizePort = val => {
     return false;
 };
 
-// Set port - process.env.PORT : whatever is in the environment variable PORT. If nothing ->  port 3000
+// Set port
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
