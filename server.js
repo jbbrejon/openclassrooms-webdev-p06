@@ -1,15 +1,55 @@
-// SCRIPT DESCRIPTION : Node server with http module (entry point of npm package)
+// SCRIPT DESCRIPTION: node server
 
-// Module dependencies.
+// Module dependencies
 const http = require('http'); // https://nodejs.dev/learn/the-nodejs-http-module
-const app = require('./app'); // Express app (local module)
+const app = require('./app'); // Local module (Express app)
 
-app.set('port', process.env.PORT || 3000); // Set "express" app port (port 3000 or process.env.PORT if unavailable)
+// Normalize a port into a number, string, or false
+const normalizePort = val => {
+    const port = parseInt(val, 10);
+    if (isNaN(port)) {
+        return val;
+    }
+    if (port >= 0) {
+        return port;
+    }
+    return false;
+};
 
-// Create node server with "createServer" method
-const server = http.createServer(app); // Call express app each time a request is sent to the server
+// Set port - process.env.PORT : whatever is in the environment variable PORT. If nothing ->  port 3000
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
+// // Handle specific listen errors with friendly messages
+const errorHandler = error => {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+    const address = server.address();
+    const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges.');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use.');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+};
 
-// Listen to requests on port 3000 or process.env.PORT if unavailable
-server.listen(process.env.PORT || 3000);
+// Use createServer method from http module to create a local server (https://nodejs.org/dist/latest-v16.x/docs/api/http.html#httpcreateserveroptions-requestlistener)
+const server = http.createServer(app);
 
+//Listen to the request events
+server.on('error', errorHandler);
+server.on('listening', () => {
+    const address = server.address();
+    const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
+    console.log('Listening on ' + bind);
+});
+
+server.listen(port);
