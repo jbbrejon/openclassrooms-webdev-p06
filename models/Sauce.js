@@ -1,4 +1,4 @@
-// SCRIPT DESCRIPTION : "Mongoose" model for "user" documents in "oc-hotTakes" MongoDB (called from ../controllers/sauce.js)
+// SCRIPT DESCRIPTION : "Mongoose" model for "sauce" documents in "oc-hotTakes" MongoDB (called from ../controllers/sauce.js)
 
 // Inlude module : "mongoose" (https://www.npmjs.com/package/mongoose)
 const mongoose = require('mongoose');
